@@ -20,10 +20,9 @@ a push notification with the result, exit code, and duration.
 
 Examples:
   tn run npm run build
-  tn run --topic my-builds make -j8
-  tn run ping -n 5 127.0.0.1`,
-	DisableFlagParsing: false,
-	Args:               cobra.MinimumNArgs(1),
+  tn run ping -n 5 127.0.0.1
+  tn -t my-builds run make -j8`,
+	DisableFlagParsing: true,
 	RunE:               runRun,
 }
 
@@ -32,6 +31,10 @@ func init() {
 }
 
 func runRun(cmd *cobra.Command, args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("no command specified — usage: tn run <command> [args...]")
+	}
+
 	// Build the command
 	name := args[0]
 	var cmdArgs []string
