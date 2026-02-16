@@ -14,12 +14,12 @@ func waitForPIDPlatform(pid int) (time.Duration, error) {
 	handle, err := windows.OpenProcess(
 		windows.SYNCHRONIZE|windows.PROCESS_QUERY_LIMITED_INFORMATION,
 		false,
-		uint32(pid),
+		uint32(pid), // #nosec G115 — PIDs are positive and fit in uint32
 	)
 	if err != nil {
 		return 0, fmt.Errorf("cannot open process %d: %w", pid, err)
 	}
-	defer windows.CloseHandle(handle)
+	defer windows.CloseHandle(handle) //nolint:errcheck
 
 	event, err := windows.WaitForSingleObject(handle, windows.INFINITE)
 	if err != nil {

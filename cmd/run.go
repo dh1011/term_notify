@@ -46,10 +46,10 @@ func runRun(cmd *cobra.Command, args []string) error {
 	var proc *exec.Cmd
 	if runtime.GOOS == "windows" {
 		allArgs := append([]string{"/C", name}, cmdArgs...)
-		proc = exec.Command("cmd", allArgs...)
+		proc = exec.Command("cmd", allArgs...) // #nosec G204 — this is a command runner tool
 	} else {
 		shellCmd := strings.Join(args, " ")
-		proc = exec.Command("sh", "-c", shellCmd)
+		proc = exec.Command("sh", "-c", shellCmd) // #nosec G204
 	}
 
 	proc.Stdout = os.Stdout

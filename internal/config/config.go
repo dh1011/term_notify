@@ -61,7 +61,7 @@ func Load() (*Config, error) {
 		return cfg, nil
 	}
 
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) // #nosec G304 — config path is trusted
 	if err != nil {
 		if os.IsNotExist(err) {
 			applyEnvOverrides(cfg)
@@ -85,7 +85,7 @@ func Save(cfg *Config) error {
 		return err
 	}
 
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return fmt.Errorf("creating config directory: %w", err)
 	}
 
@@ -94,7 +94,7 @@ func Save(cfg *Config) error {
 		return fmt.Errorf("marshaling config: %w", err)
 	}
 
-	if err := os.WriteFile(path, data, 0o644); err != nil {
+	if err := os.WriteFile(path, data, 0o600); err != nil {
 		return fmt.Errorf("writing config file: %w", err)
 	}
 

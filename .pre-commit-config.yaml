@@ -1,0 +1,50 @@
+# Pre-commit hooks for term_notify
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+#
+# Tool requirements:
+#   go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+#   go install github.com/securego/gosec/v2/cmd/gosec@latest
+
+repos:
+  - repo: local
+    hooks:
+      # ── Go module hygiene ────────────────────────────────────────
+      - id: go-mod-tidy
+        name: go mod tidy
+        entry: go mod tidy
+        language: system
+        pass_filenames: false
+        files: '\.go$|go\.mod$|go\.sum$'
+
+      # ── Unit tests ──────────────────────────────────────────────
+      - id: go-unit-tests
+        name: go test
+        entry: go test ./...
+        language: system
+        pass_filenames: false
+        files: '\.go$'
+
+      # ── Static analysis ─────────────────────────────────────────
+      - id: go-vet
+        name: go vet
+        entry: go vet ./...
+        language: system
+        pass_filenames: false
+        files: '\.go$'
+
+      # ── Linting + code smells ────────────────────────────────────
+      - id: golangci-lint
+        name: golangci-lint
+        entry: golangci-lint run --timeout=5m
+        language: system
+        pass_filenames: false
+        files: '\.go$'
+
+      # ── Security scanning ───────────────────────────────────────
+      - id: gosec
+        name: gosec
+        entry: gosec -exclude-dir=vendor ./...
+        language: system
+        pass_filenames: false
+        files: '\.go$'

@@ -116,7 +116,7 @@ tn run --topic urgent-builds --priority high make build
 Add to your `$PROFILE` (`~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1`):
 
 ```powershell
-. "E:\Development\term_notify\shell\tn.ps1"
+. "<path-to-term_notify>/shell/tn.ps1"
 ```
 
 This gives you:
@@ -147,7 +147,7 @@ tn config --token tk_your_token_here
 ## Building from Source
 
 ```bash
-git clone https://github.com/lee/term_notify.git
+git clone https://github.com/dh1011/term_notify.git
 cd term_notify
 go build -o tn.exe .    # Windows
 go build -o tn .         # Linux/macOS
@@ -160,6 +160,26 @@ GOOS=linux GOARCH=amd64 go build -o tn .
 GOOS=darwin GOARCH=arm64 go build -o tn .
 GOOS=windows GOARCH=amd64 go build -o tn.exe .
 ```
+
+## Development
+
+### Running Tests
+
+```bash
+go test -v ./...
+```
+
+### Pre-commit Hooks
+
+This project uses [pre-commit](https://pre-commit.com/) to run tests, linting, security scanning, and code smell detection before each commit.
+
+```bash
+pip install pre-commit   # if not already installed
+pre-commit install       # set up git hooks
+pre-commit run --all-files  # run manually
+```
+
+Configured hooks: `go test`, `go vet`, `golangci-lint`, `gosec`, `go mod tidy`.
 
 ## License
 
